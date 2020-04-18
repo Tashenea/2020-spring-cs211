@@ -49,12 +49,12 @@ public class PathFinder
         while (found == false && pathQueue.IsEmpty() == false)
         {
             //TODO: Implement Dijkstra's algorithm!
-            TilePath currentPath = pathQueue.Dequeue();
+            TilePath currentPath = new TilePath(pathQueue.Dequeue());
 
             // Step 1, we found the spot
-            Tile Location = currentPath.GetMostRecentTile(); // TO-DO: Get most recent tile's location, assign to variable
+            Vector3Int Location = currentPath.GetMostRecentTile().Position; // TO-DO: Get most recent tile's location, assign to variable
 
-            if (Location == endingTile) // If currentLocation == End location
+            if (Location == endingTile.Position) // If currentLocation == End location
             {
                 discoveredPath = currentPath;
                 break;
@@ -70,13 +70,30 @@ public class PathFinder
 
             // Get location of X
 
-            Vector3Int nextSpaceLocation = .Location;//stuck here
+            Vector3Int down = Location;
+            Vector3Int up = Location;
+            Vector3Int right = Location;
+            Vector3Int left = Location;
+
+            down.y -= 1;
+            up.y += 1;
+            right.x += 1;
+            left.x -= 1;
+
+            Vector3Int[] next_steps = new Vector3Int[4];
+            next_steps[0] = down;
+            next_steps[1] = up;
+            next_steps[2] = right;
+            next_steps[3] = left;
+
+            for (int i = 0; i < 4; i++)
+            {
 
                 // Get the tile and set to position of X
-                var xTileLocation = map.GetTile(nextSpaceLocation);
+                var xTileLocation = map.GetTile(next_steps[i]);
                 // Get the tile
                 var xTile = tileFactory.GetTile(xTileLocation.name);
-                xTile.Position = nextSpaceLocation;
+                xTile.Position = next_steps[i];
 
                 // Now we make a brand new path based on our currento ne.
                 TilePath copyForX = new TilePath(currentPath); // Done
@@ -84,20 +101,30 @@ public class PathFinder
                 // Add xTile to copyForX
                 copyForX.AddTileToPath(xTile); // todo
 
+                if(next_steps[i] == endingTile.Position)
+                {
+                    found = true;
+                    break;
+                }
+                else
+                {
+                    pathQueue.Enqueue(copyForX);
+                }
                 // Enqueue to pathQueue
                 pathQueue.Enqueue(copyForX); // Todo
             }
-            // Repeat for every X value (4 total) // todo
-
-
-
-
-
-            //pathQueue.Dequeue();
-            //This line ensures that we don't get an infinite loop in Unity.
-            //You will need to remove it in order for your pathfinding algorithm to work.
-            found = true;
         
+        // Repeat for every X value (4 total) // todo
+
+
+
+
+
+        //pathQueue.Dequeue();
+        //This line ensures that we don't get an infinite loop in Unity.
+        //You will need to remove it in order for your pathfinding algorithm to work.
+        found = true;
+    }
         return discoveredPath;
     }
 }
