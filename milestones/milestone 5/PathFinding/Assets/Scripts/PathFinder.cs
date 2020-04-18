@@ -33,12 +33,13 @@ public class PathFinder
         //This is how you get tile information for a particular map location
         //This gets the Unity tile, which contains a coordinate (.Position)
         var startingMapLocation = map.GetTile(start);
-
+        var endingMapLocation = map.GetTile(end);
         //And this converts the Unity tile into an object model that tracks the
         //cost to visit the tile.
         var startingTile = tileFactory.GetTile(startingMapLocation.name);
         startingTile.Position = start;
-
+        var endingTile = tileFactory.GetTile(endingMapLocation.name);
+        endingTile.Position = end;
         //Any discovered path must start at the origin!
         discoveredPath.AddTileToPath(startingTile);
 
@@ -51,11 +52,12 @@ public class PathFinder
             TilePath currentPath = pathQueue.Dequeue();
 
             // Step 1, we found the spot
-            Vector3Int Location = currentPath.GetMostRecentTile(); // TO-DO: Get most recent tile's location, assign to variable
+            Tile Location = currentPath.GetMostRecentTile(); // TO-DO: Get most recent tile's location, assign to variable
 
-            if (currentPath == ) // If currentLocation == End location
+            if (Location == endingTile) // If currentLocation == End location
             {
-                // discoveredPath = currentPath, end while loop
+                discoveredPath = currentPath;
+                break;
             }
 
             // Step 2, we didn't find the spot, Dijksta's algorithm part 2.
@@ -65,68 +67,42 @@ public class PathFinder
             //  _X_ ___ ___ ___
             //  _O_ _O_ _OX XO_
             //  ___ _X_ ___ ___
-
+            for (int i = 0; i < 4; i++)
             // Get location of X
-            Vector3Int nextSpaceLocation = something;
+            {
+                Vector3Int nextSpaceLocation = discoveredTiles.Location;
 
-            // Get the tile and set to position of X
-            var xTileLocation = map.GetTile(nextSpaceLocation);
-            // Get the tile
-            var xTile = tileFactory.GetTile(xTileLocation.name);
-            xTile.Position = nextSpaceLocation;
+                // Get the tile and set to position of X
+                var xTileLocation = map.GetTile(nextSpaceLocation);
+                // Get the tile
+                var xTile = tileFactory.GetTile(xTileLocation.name);
+                xTile.Position = nextSpaceLocation;
 
-            // Now we make a brand new path based on our currento ne.
-            TilePath copyForX = new TilePath(currentPath); // Done
+                // Now we make a brand new path based on our currento ne.
+                TilePath copyForX = new TilePath(currentPath); // Done
 
-            // Add xTile to copyForX
-            copyForX.addTheTileWithAFunction(xTile); // todo
+                // Add xTile to copyForX
+                copyForX.AddTileToPath(xTile); // todo
 
-            // Enqueue to pathQueue
-            pathQueue.QueueItUpBabbeeeeeeee(copyForX); // Todo
-            // Repeat for exery X value (4 total) // todo
-
-
-
-
-
-            int v;                                 // The current vertex
-            int[] D;
-            //PriortyQueue[] Edge = new PriortyQueue.pathQueue.GetSize();        // Heap for edges
-            //pathQueue[0] = new PriortyQueue(0,start);               // Initial vertex
-            PriortyQueue.MinHeap = new MinHeap(pathQueue, 1, pathQueue.GetSize());
-            for (int i = 0; i < PriortyQueue.Count; i++)            // Initialize distance
-                D[i] = Inf;
-            D[v] = 0;
-            for (int i = 0; i < PriortyQueue.Count; i++)
-            {          // For each vertex
-                do
-                {
-                    PriortyQueue temp = (PriortyQueue)(Heap.Dequeue());
-                    if (temp == Inf) return;       // Unreachable nodes exist
-                    v = (Integer)temp.value();
-                } // Get position
-                while (PriortyQueue.GetFirst(v) == true);
-                PriortyQueue.setValue(v, true);
-                if (D[v] == false) return;        // Unreachable
-                int[] nList = PriortyQueue.adjustHeap(v);
-                for (int j = 0; j < nList.length; j++)
-                {
-                    {
-                        int w = nList[j];
-                        if (D[w] > (D[v] + AddTileToPath(v)))
-                        { // Update D
-                            D[w] = D[v] + AddTileToPath(v);
-                            Heap.insert(new pathQueue(D[w], w));
-                        }
-
-                        //pathQueue.Dequeue();
-                        //This line ensures that we don't get an infinite loop in Unity.
-                        //You will need to remove it in order for your pathfinding algorithm to work.
-                        found = true;
-                    }
-                    return discoveredPath;
-                }
+                // Enqueue to pathQueue
+                pathQueue.Enqueue(copyForX); // Todo
             }
+            // Repeat for every X value (4 total) // todo
+
+
+
+
+
+            //pathQueue.Dequeue();
+            //This line ensures that we don't get an infinite loop in Unity.
+            //You will need to remove it in order for your pathfinding algorithm to work.
+            found = true;
         }
+        return discoveredPath;
     }
 }
+            
+
+        
+    
+
