@@ -48,20 +48,61 @@ public class PathFinder
         while (found == false && pathQueue.IsEmpty() == false)
         {
             //TODO: Implement Dijkstra's algorithm!
+            TilePath currentPath = pathQueue.Dequeue();
+
+            // Step 1, we found the spot
+            Vector3Int Location = currentPath.GetMostRecentTile(); // TO-DO: Get most recent tile's location, assign to variable
+
+            if (currentPath == ) // If currentLocation == End location
+            {
+                // discoveredPath = currentPath, end while loop
+            }
+
+            // Step 2, we didn't find the spot, Dijksta's algorithm part 2.
+
+            // Do this 4 times, once for each of these locations:
+            // where O is our current path, and X is the next path we go to
+            //  _X_ ___ ___ ___
+            //  _O_ _O_ _OX XO_
+            //  ___ _X_ ___ ___
+
+            // Get location of X
+            Vector3Int nextSpaceLocation = something;
+
+            // Get the tile and set to position of X
+            var xTileLocation = map.GetTile(nextSpaceLocation);
+            // Get the tile
+            var xTile = tileFactory.GetTile(xTileLocation.name);
+            xTile.Position = nextSpaceLocation;
+
+            // Now we make a brand new path based on our currento ne.
+            TilePath copyForX = new TilePath(currentPath); // Done
+
+            // Add xTile to copyForX
+            copyForX.addTheTileWithAFunction(xTile); // todo
+
+            // Enqueue to pathQueue
+            pathQueue.QueueItUpBabbeeeeeeee(copyForX); // Todo
+            // Repeat for exery X value (4 total) // todo
+
+
+
+
+
             int v;                                 // The current vertex
             int[] D;
-            PriortyQueue[] Edge = new PriortyQueue[pathQueue.GetSize()];        // Heap for edges
-            Edge[0] = new PriortyQueue(0, v);               // Initial vertex
-            PriortyQueue.MinHeap Heap = new MinHeap(Edge, 1, pathQueue.GetSize());
+            //PriortyQueue[] Edge = new PriortyQueue.pathQueue.GetSize();        // Heap for edges
+            //pathQueue[0] = new PriortyQueue(0,start);               // Initial vertex
+            PriortyQueue.MinHeap = new MinHeap(pathQueue, 1, pathQueue.GetSize());
             for (int i = 0; i < PriortyQueue.Count; i++)            // Initialize distance
-                D[i] = null;
+                D[i] = Inf;
             D[v] = 0;
             for (int i = 0; i < PriortyQueue.Count; i++)
             {          // For each vertex
                 do
                 {
                     PriortyQueue temp = (PriortyQueue)(Heap.Dequeue());
-                    if (temp == null) return;       // Unreachable nodes exist
+                    if (temp == Inf) return;       // Unreachable nodes exist
                     v = (Integer)temp.value();
                 } // Get position
                 while (PriortyQueue.GetFirst(v) == true);
