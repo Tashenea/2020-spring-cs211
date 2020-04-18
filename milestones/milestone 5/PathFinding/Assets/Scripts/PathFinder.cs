@@ -67,10 +67,10 @@ public class PathFinder
             //  _X_ ___ ___ ___
             //  _O_ _O_ _OX XO_
             //  ___ _X_ ___ ___
-            for (int i = 0; i < 4; i++)
+
             // Get location of X
-            {
-                Vector3Int nextSpaceLocation = discoveredTiles.Location;
+
+            Vector3Int nextSpaceLocation = .Location;//stuck here
 
                 // Get the tile and set to position of X
                 var xTileLocation = map.GetTile(nextSpaceLocation);
@@ -97,7 +97,7 @@ public class PathFinder
             //This line ensures that we don't get an infinite loop in Unity.
             //You will need to remove it in order for your pathfinding algorithm to work.
             found = true;
-        }
+        
         return discoveredPath;
     }
 }
